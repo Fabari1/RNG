@@ -1,0 +1,109 @@
+<template>
+  <v-container class="container">
+    <v-row class="bg-surfaceVariant row" justify="center"> 
+      <v-col class="col1 col2" align="center">
+        <v-card title="LED A" width="150" density="compact" border flat rounded="md">
+          <v-divider></v-divider>
+          <v-card-item>
+            <v-icon size="50" icon="mdi:mdi-lightbulb"></v-icon>
+            <v-icon size="50" icon="mdi:mdi-lightbulb-on" color="yellow"></v-icon>
+          </v-card-item>
+          <v-card-item>
+            <v-btn class="text-caption" text="Toggle" variant="tonal" color="primary" density="compact"></v-btn>
+          </v-card-item>
+        </v-card>
+      </v-col>
+      <v-col class="col1 col2" align="center">
+        <v-card title="LED A" width="150" density="compact" border flat rounded="md">
+          <v-divider></v-divider>
+          <v-card-item>
+            <v-icon size="50" icon="mdi:mdi-lightbulb"></v-icon>
+            <v-icon size="50" icon="mdi:mdi-lightbulb-on" color="yellow"></v-icon>
+          </v-card-item>
+          <v-card-item>
+            <v-btn class="text-caption" text="Toggle" variant="tonal" color="primary" density="compact"></v-btn>
+          </v-card-item>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="row" justify="center"> 
+      <v-col class="bg-black col col3" align="center" >
+        <span class="digit text-error">
+        <span >&#x1fbf0;</span>
+        <span >&#x1fbf1;</span>
+        <span >&#x1fbf2;</span>
+        <span >&#x1fbf3;</span>
+        <span >&#x1fbf4;</span>
+        <span >&#x1fbf5;</span>
+        <span >&#x1fbf6;</span>
+        <span >&#x1fbf7;</span>
+        <span >&#x1fbf8;</span>
+        <span >&#x1fbf9;</span>
+        </span>
+
+      </v-col>
+    </v-row>
+  </v-container>
+  
+</template>
+
+<script setup>
+/** JAVASCRIPT HERE */
+
+// IMPORTS
+import { ref,reactive,watch ,onMounted,onBeforeUnmount,computed } from "vue";  
+import { useRoute ,useRouter } from "vue-router";
+
+
+// VARIABLES
+const router      = useRouter();
+const route       = useRoute();  
+
+
+// FUNCTIONS
+onMounted(()=>{
+  // THIS FUNCTION IS CALLED AFTER THIS COMPONENT HAS BEEN MOUNTED
+});
+
+
+onBeforeUnmount(()=>{
+  // THIS FUNCTION IS CALLED RIGHT BEFORE THIS COMPONENT IS UNMOUNTED
+});
+
+
+</script>
+
+
+<style scoped>
+/** CSS STYLE HERE */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap');
+.container{
+  height: 100%;
+  border: 1px solid blue;
+}
+.row{
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.col{
+  border: 1px solid green;
+}
+
+.col1, .col2{
+  max-width: 200px;
+}
+
+.col3{
+  height: 320px;
+  max-width: 270px;
+  border: 2px solid lightslategray
+}
+.digit{
+  font-family: 'Noto Sans Symbols 2';
+  font-size: 250px;
+}
+</style>
+
+  
