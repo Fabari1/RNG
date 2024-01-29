@@ -5,11 +5,11 @@
         <v-card title="LED A" width="150" density="compact" border flat rounded="md">
           <v-divider></v-divider>
           <v-card-item>
-            <v-icon size="50" icon="mdi:mdi-lightbulb"></v-icon>
-            <v-icon size="50" icon="mdi:mdi-lightbulb-on" color="yellow"></v-icon>
+            <v-icon v-if="payload.ledA == 0" size="50" icon="mdi:mdi-lightbulb"></v-icon>
+            <v-icon v-if="payload.ledA == 1" size="50" icon="mdi:mdi-lightbulb-on" color="yellow"></v-icon>
           </v-card-item>
           <v-card-item>
-            <v-btn class="text-caption" text="Toggle" variant="tonal" color="primary" density="compact"></v-btn>
+            <v-btn class="text-caption" text="Toggle" variant="tonal" color="primary" density="compact" @click="toggle('LED A')"></v-btn>
           </v-card-item>
         </v-card>
       </v-col>
@@ -17,11 +17,11 @@
         <v-card title="LED A" width="150" density="compact" border flat rounded="md">
           <v-divider></v-divider>
           <v-card-item>
-            <v-icon size="50" icon="mdi:mdi-lightbulb"></v-icon>
-            <v-icon size="50" icon="mdi:mdi-lightbulb-on" color="yellow"></v-icon>
+            <v-icon v-if="payload.ledA == 0" size="50" icon="mdi:mdi-lightbulb"></v-icon>
+            <v-icon v-if="payload.ledA == 1" size="50" icon="mdi:mdi-lightbulb-on" color="yellow"></v-icon>
           </v-card-item>
           <v-card-item>
-            <v-btn class="text-caption" text="Toggle" variant="tonal" color="primary" density="compact"></v-btn>
+            <v-btn class="text-caption" text="Toggle" variant="tonal" color="primary" density="compact" @click="toggle('LED A')"></v-btn>
           </v-card-item>
         </v-card>
       </v-col>
@@ -32,7 +32,6 @@
         <span >&#x1fbf0;</span>
         <span >&#x1fbf1;</span>
         <span >&#x1fbf2;</span>
-        <span >&#x1fbf3;</span>
         <span >&#x1fbf4;</span>
         <span >&#x1fbf5;</span>
         <span >&#x1fbf6;</span>
@@ -58,6 +57,10 @@ import { useRoute ,useRouter } from "vue-router";
 // VARIABLES
 const router      = useRouter();
 const route       = useRoute();  
+const toggle = (name) => {
+let message = JSON.stringify({"type":"toggle","device": name}); // Create message and convert to a json string
+Mqtt.publish("topic",message); // Publish message to appropriate topic
+}
 
 
 // FUNCTIONS
