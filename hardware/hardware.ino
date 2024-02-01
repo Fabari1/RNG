@@ -31,24 +31,35 @@
 // DEFINE THE PINS THAT WILL BE MAPPED TO THE 7 SEG DISPLAY BELOW, 'a' to 'g'
 #define a     15
 /* Complete all others */
+#define b   32
+#define c   33
+#define d   25
+#define e   26
+#define f   27
+#define g   14
+#define dp  12   
+
 
 
 
 // DEFINE VARIABLES FOR TWO LEDs AND TWO BUTTONs. LED_A, LED_B, BTN_A , BTN_B
 #define LED_A 4
 /* Complete all others */
+#define LED_B 2
+#define BTN_A 17
+
 
 
 
 // MQTT CLIENT CONFIG  
-static const char* pubtopic      = "620012345";                    // Add your ID number here
-static const char* subtopic[]    = {"620012345_sub","/elet2415"};  // Array of Topics(Strings) to subscribe to
-static const char* mqtt_server   = "address or ip";         // Broker IP address or Domain name as a String 
+static const char* pubtopic      = "620154701";                    // Add your ID number here
+static const char* subtopic[]    = {"620154701_sub","/elet2415"};  // Array of Topics(Strings) to subscribe to
+static const char* mqtt_server   = "www.yanacreations.com";         // Broker IP address or Domain name as a String 
 static uint16_t mqtt_port        = 1883;
 
 // WIFI CREDENTIALS
-const char* ssid       = "YOUR_SSID"; // Add your Wi-Fi ssid
-const char* password   = "YOUR_PASS"; // Add your Wi-Fi password 
+const char* ssid       = "MonaConnect"; // Add your Wi-Fi ssid
+const char* password   = ""; // Add your Wi-Fi password 
 
 
 
@@ -97,9 +108,20 @@ void setup() {
   // CONFIGURE THE ARDUINO PINS OF THE 7SEG AS OUTPUT
   pinMode(a,OUTPUT);
   /* Configure all others here */
+  pinMode(b,OUTPUT);
+  pinMode(c,OUTPUT);
+  pinMode(d,OUTPUT);
+  pinMode(e,OUTPUT);
+  pinMode(f,OUTPUT);
+  pinMode(g,OUTPUT);
+  pinMode(LED_A,OUTPUT);
+  pinMode(LED_B,OUTPUT);
+  pinMode(BTN_A,INPUT_PULLUP);
+  
 
+  Display(8);
   initialize();           // INIT WIFI, MQTT & NTP 
-  // vButtonCheckFunction(); // UNCOMMENT IF USING BUTTONS THEN ADD LOGIC FOR INTERFACING WITH BUTTONS IN THE vButtonCheck FUNCTION
+  vButtonCheckFunction(); // UNCOMMENT IF USING BUTTONS THEN ADD LOGIC FOR INTERFACING WITH BUTTONS IN THE vButtonCheck FUNCTION
 
 }
   
@@ -123,6 +145,10 @@ void vButtonCheck( void * pvParameters )  {
     for( ;; ) {
         // Add code here to check if a button(S) is pressed
         // then execute appropriate function if a button is pressed  
+       if (digitalRead(BTN_A) == LOW) {
+          GDP();
+       }
+
 
         vTaskDelay(200 / portTICK_PERIOD_MS);  
     }
@@ -138,7 +164,11 @@ void vUpdate( void * pvParameters )  {
           char message[1100]  = {0};
 
           // Add key:value pairs to JSon object
-          doc["id"]         = "620012345";
+          doc["id"]         = "620154701";
+          doc["timestamp"]  = getTimeStamp();
+          doc["number"]       = number;
+          doc["ledA"]         = getLEDStatus(LED_A);
+          doc["ledB"]         = getLEDStatus(LED_B);
 
           serializeJson(doc, message);  // Seralize / Covert JSon object to JSon string and store in char* array
 
@@ -193,9 +223,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
     if(strcmp(led, "LED A") == 0){
       /*Add code to toggle LED A with appropriate function*/
+      toggleLED(LED_A);
     }
     if(strcmp(led, "LED B") == 0){
       /*Add code to toggle LED B with appropriate function*/
+      toggleLED(LED_B);
     }
 
     // PUBLISH UPDATE BACK TO FRONTEND
@@ -204,14 +236,19 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
     // Add key:value pairs to Json object according to below schema
     // ‘{"id": "student_id", "timestamp": 1702212234, "number": 9, "ledA": 0, "ledB": 0}’
-    doc["id"]         = "ID"; // Change to your student ID number
+    doc["id"]         = "620154701"; // Change to your student ID number
     doc["timestamp"]  = getTimeStamp();
     /*Add code here to insert all other variabes that are missing from Json object
     according to schema above
     */
+    doc["number"]       = number;
+    doc["ledA"]         = getLEDStatus(LED_A);
+    doc["ledB"]         = getLEDStatus(LED_B);
+
+
 
     serializeJson(doc, message);  // Seralize / Covert JSon object to JSon string and store in char* array  
-    publish("topic", message);    // Publish to a topic that only the Frontend subscribes to.
+    publish(pubtopic, message);    // Publish to a topic that only the Frontend subscribes to.
           
   } 
 
@@ -241,48 +278,142 @@ void Display(unsigned char number){
     /*Complete from 'a' to 'g'*/
     digitalWrite(a,HIGH);
     /* Add all others */
+    digitalWrite(b,HIGH);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,HIGH);
+    digitalWrite(e,HIGH);
+    digitalWrite(f,HIGH);
+    digitalWrite(g,LOW);
+    digitalWrite(dp,HIGH);
+
      
     break;
     case 1: 
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,LOW);
+    digitalWrite(b,HIGH);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,LOW);
+    digitalWrite(e,LOW);
+    digitalWrite(f,LOW);
+    digitalWrite(g,LOW);
+    digitalWrite(dp,HIGH);
+
     break;
     case 2:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(c,LOW);
+    digitalWrite(d,HIGH);
+    digitalWrite(e,HIGH);
+    digitalWrite(f,LOW);
+    digitalWrite(g,HIGH);
+    digitalWrite(dp,HIGH);
+
     break;
     case 3:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,HIGH);
+    digitalWrite(e,LOW);
+    digitalWrite(f,LOW);
+    digitalWrite(g,HIGH);
+    digitalWrite(dp,HIGH);
+
     break;
     case 4:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,LOW);
+    digitalWrite(b,HIGH);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,LOW);
+    digitalWrite(e,LOW);
+    digitalWrite(f,HIGH);
+    digitalWrite(g,HIGH);
+    digitalWrite(dp,HIGH);
+
     break;
     case 5:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,HIGH);
+    digitalWrite(b,LOW);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,HIGH);
+    digitalWrite(e,LOW);
+    digitalWrite(f,HIGH);
+    digitalWrite(g,HIGH);
+    digitalWrite(dp,HIGH);
+
     break;
     case 6:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,HIGH);
+    digitalWrite(b,LOW);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,HIGH);
+    digitalWrite(e,HIGH);
+    digitalWrite(f,HIGH);
+    digitalWrite(g,HIGH);
+    digitalWrite(dp,HIGH);
+
     break;
     case 7:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,LOW);
+    digitalWrite(e,LOW);
+    digitalWrite(f,LOW);
+    digitalWrite(g,LOW);
+    digitalWrite(dp,HIGH);
+
     break;
     case 8:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,HIGH);
+    digitalWrite(e,HIGH);
+    digitalWrite(f,HIGH);
+    digitalWrite(g,HIGH);
+    digitalWrite(dp,HIGH);
+
     break;
     case 9:
     /*Complete from 'a' to 'g'*/
+    digitalWrite(a,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(c,HIGH);
+    digitalWrite(d,HIGH);
+    digitalWrite(e,LOW);
+    digitalWrite(f,HIGH);
+    digitalWrite(g,HIGH);
+    digitalWrite(dp,HIGH);
+
     break;
   }
 }
 
 int8_t getLEDStatus(int8_t LED) {
-  // RETURNS THE STATE OF A SPECIFIC LED. 0 = LOW, 1 = HIGH  
+  // RETURNS THE STATE OF A SPECIFIC LED. 0 = LOW, 1 = HIGH 
+  return digitalRead(LED); 
 }
 
 void setLEDState(int8_t LED, int8_t state){
   // SETS THE STATE OF A SPECIFIC LED   
+  digitalWrite(LED, state);
 }
 
 void toggleLED(int8_t LED){
-  // TOGGLES THE STATE OF SPECIFIC LED   
+  // TOGGLES THE STATE OF SPECIFIC LED  
+  int8_t ledState= !(getLEDStatus(LED));
+  setLEDState(LED, ledState);
+ 
 }
 
 void GDP(void){
@@ -292,22 +423,25 @@ void GDP(void){
   /* Add code here to generate a random integer and then assign 
      this integer to number variable below
   */
-   number = 0 ;
+    number =random(10);
 
   // DISPLAY integer on 7Seg. by 
   /* Add code here to calling appropriate function that will display integer to 7-Seg*/
-
+    Display(number);
   // PUBLISH number to topic.
   StaticJsonDocument<1000> doc; // Create JSon object
   char message[1100]  = {0};
 
   // Add key:value pairs to Json object according to below schema
   // ‘{"id": "student_id", "timestamp": 1702212234, "number": 9, "ledA": 0, "ledB": 0}’
-  doc["id"]         = "ID"; // Change to your student ID number
+  doc["id"]         = "620154701"; // Change to your student ID number
   doc["timestamp"]  = getTimeStamp();
   /*Add code here to insert all other variabes that are missing from Json object
   according to schema above
   */
+  doc["number"]       = number;
+  doc["ledA"]         = getLEDStatus(LED_A);
+  doc["ledB"]         = getLEDStatus(LED_B);
 
   serializeJson(doc, message);  // Seralize / Covert JSon object to JSon string and store in char* array
   publish(pubtopic, message);
